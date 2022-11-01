@@ -11,11 +11,24 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(uuid())
+  id           String   @id @default(uuid())
   displayName  String
-  userName     String  @unique
-  email        String  @unique
+  userName     String   @unique
+  email        String   @unique
   password     String
   isActive     Boolean
   refreshToken String?
+  travels      Travel[]
+}
+
+model Travel {
+  id        String   @id @default(uuid())
+  startDate DateTime
+  endDate   DateTime
+  traveller User     @relation(fields: [userId], references: [id])
+  userId    String
+  pros      String[]
+  contras   String[]
+  country   String
+  city      String
 }

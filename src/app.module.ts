@@ -4,10 +4,18 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { PrismaService } from "./prisma/prisma.service";
 import { PrismaModule } from "./prisma/prisma.module";
+import { APP_GUARD } from "@nestjs/core";
+import { AtGuard } from "./common/guards/at.guard";
 
 @Module({
   imports: [AuthModule, PrismaModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule {}

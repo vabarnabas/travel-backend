@@ -1,5 +1,8 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { GetCurrentUser } from "src/common/decorators";
+import { Public } from "src/common/decorators/public.decorator";
+import { AtGuard } from "src/common/guards/at.guard";
+import { RtGuard } from "src/common/guards/rt.guard";
 import { PrismaService } from "src/prisma/prisma.service";
 import { AuthService } from "./auth.service";
 import { AuthDTO } from "./dto";
@@ -11,20 +14,20 @@ export class AuthController {
     private prismaService: PrismaService,
   ) {}
 
-  // @Public()
+  @Public()
   @Post("/local/signin")
   signInLocal(@Body() dto: AuthDTO) {
     return this.authService.signInLocal(dto);
   }
 
-  // @UseGuards(AtGuard)
+  @UseGuards(AtGuard)
   @Post("/logout")
   logout(@GetCurrentUser("id") id: string) {
     return this.authService.logout(id);
   }
 
-  // @Public()
-  // @UseGuards(RtGuard)
+  @Public()
+  @UseGuards(RtGuard)
   @Post("/refresh")
   refresh(
     @GetCurrentUser("id") id: string,
